@@ -1,42 +1,96 @@
+# services:
+#   # nginx:
+#   #   container_name : nginx
+#   #   build : ./requirements/nginx
+#   #   ports : 
+#   #     -'443:443' 
+#   #   expose : 443
+#   #   depends_on : mariadb 
+#   #   networks :
+#   #     - inception
+#   #   restart : always
+
+
+
+#   wordpress :
+#     container_name : wordpress
+#     build : ./requirements/wordpress
+#     ports : 
+#       - 'docker-network'
+#     networks :
+#       - inception
+#     volume :
+#       - wordpress_data : /home/ilaasri/data/wordpress
+#     restart : always
+
+
+#   mariadb:
+#     container_name : mariadb
+#     build : ./requirements/mariadb
+#     networks :
+#       - inception
+#     restart : always
+
+
+# volumes :
+#   mriadb_data:
+#   wordpress_data:
+
+
+# networks :
+#   inception :
+#     driver : bridge
+
+
+
+version: '3.8'
+
 services:
-  nginx:
-    container_name : nginx
-    build : ./requirements/nginx
-    ports : 
-      -'443:443' 
-    expose : 443
-    depends_on : mariadb 
-    networks :
+  # nginx:
+  #   container_name: nginx
+  #   build: ./requirements/nginx
+  #   ports: 
+  #     - '443:443'       # Expose HTTPS on host
+  #   depends_on:
+  #     - wordpress       # Depends on WordPress, not MariaDB directly
+  #   networks:
+  #     - inception
+  #   restart: always
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    ports:
+      - '9000:9000'     # PHP-FPM exposed for NGINX
+    networks:
       - inception
-    restart : always
-
-
-
-  wordpress :
-    container_name : wordpress
-    build : ./requirements/wordpress
-    ports : 
-      - 'docker-network'
-    networks :
-      - inception
-    volume :
-      - wordpress_data : /home/ilaasri/data/wordpress
-    restart : always
-
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - mariadb
+    tty: true
+    stdin_open: true
+    env_file:
+      - .env
+    restart: always
 
   mariadb:
-    container_name : mariadb
-    build : ./requirements/mariadb
-    networks :
+    container_name: mariadb
+    build: ./requirements/mariadb
+    # ports:
+    #   - '3306:3306'
+    networks:
       - inception
-    restart : always
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    env_file:
+      - .env
+    restart: always
 
-
-volumes :
-  mriadb_data:
+volumes:
+  mariadb_data:
   wordpress_data:
 
-
-networks :
-  inception :
-    driver : bridge
+networks:
+  inception:
+    driver: bridge

@@ -12,3 +12,5 @@ mariadb -e "FLUSH PRIVILEGES;"
 mysqladmin -u root -p${MYSQL_ROOT_PASSWORD} shutdown
 
 exec "$@"
+
+
