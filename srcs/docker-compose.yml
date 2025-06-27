@@ -1,0 +1,42 @@
+services:
+  nginx:
+    container_name : nginx
+    build : ./requirements/nginx
+    ports : 
+      -'443:443' 
+    expose : 443
+    depends_on : mariadb 
+    networks :
+      - inception
+    restart : always
+
+
+
+  wordpress :
+    container_name : wordpress
+    build : ./requirements/wordpress
+    ports : 
+      - 'docker-network'
+    networks :
+      - inception
+    volume :
+      - wordpress_data : /home/ilaasri/data/wordpress
+    restart : always
+
+
+  mariadb:
+    container_name : mariadb
+    build : ./requirements/mariadb
+    networks :
+      - inception
+    restart : always
+
+
+volumes :
+  mriadb_data:
+  wordpress_data:
+
+
+networks :
+  inception :
+    driver : bridge
