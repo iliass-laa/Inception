@@ -1,20 +1,7 @@
-VOLUMEPATH = /home/${USER}/data
+VOLUMEPATH = ${HOME}/data
 WORDPRESS_V = $(VOLUMEPATH)/wordpress
 MARIADB_V = $(VOLUMEPATH)/mariadb
 
-# NAME = alo
-
-# all : $(NAME)
-
-
-# $(NAME):
-# 	@echo $(VOLUMEPATH)
-# 	@echo $(MARIADB_V)
-# 	@echo $(WORDPRESS_V)
-
-
-# clean :
-# 	rm -rf $(NAME)
 
 
 all : build setup
@@ -22,12 +9,38 @@ all : build setup
 
 build :
 	@echo "Building ..."
-	@mkdir -p $(WORDPRESS_V)
-	@mkdir -p $(MARIADB_V)
+	@mkdir -p $(WORDPRESS_V) && \
+	mkdir -p $(MARIADB_V) && \
+	cd ${PWD}/srcs ; docker compose build
+
 
 setup :
 	@echo "Setuping ..."
+	@cd ${PWD}/srcs; docker compose up -d
 
+clean :
+	@echo cleaning ...
+	@cd ${PWD}/srcs;docker compose down -v
+
+
+
+fclean : clean
+	@echo full cleaning ...
+	@sudo rm -rf $(WORDPRESS_V)
+	@sudo rm -rf $(MARIADB_V)
+
+
+
+re : fclean all
+
+logs:
+	@cd ${PWD}/srcs && docker compose logs -f
+
+status:
+	@cd ${PWD}/srcs && docker compose ps
+
+
+.PHONY : all clean fclean re build setup status logs
 
 
 

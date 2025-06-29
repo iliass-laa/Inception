@@ -1,6 +1,5 @@
 FROM debian:bullseye
 
-
 RUN apt -y update && apt upgrade -y\
     && apt install -y php-fpm \
     php-mysql \
@@ -12,16 +11,17 @@ RUN apt -y update && apt upgrade -y\
     vim \
     mariadb-client
 
-RUN mkdir -p /myApp
 
-WORKDIR /myApp
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
+
+WORKDIR /var/www/html/
 
 COPY ./conf/wp-conf.sh . 
 
 RUN chmod +x wp-conf.sh
 
-
 EXPOSE 9000
 
-# CMD ["bash"]
 ENTRYPOINT ["./wp-conf.sh"]

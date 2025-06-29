@@ -26,6 +26,30 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     sed -i "s/localhost/${WORDPRESS_DB_HOST}/" /var/www/html/wp-config.php
 fi
 
+
+if ! wp core is-installed --allow-root; then
+    echo "Installing WordPress..."
+
+    wp core install \
+        --url="https://ilaasri.42.fr" \
+        --title="Inception WP" \
+        --admin_user="$WP_ADMIN_N" \
+        --admin_password="$WP_ADMIN_PSWD" \
+        --admin_email="$WP_ADMIN_EMAIL" \
+        --skip-email \
+        --allow-root
+
+    wp user create \
+        "$WP_USER_N" "$WP_USER_EMAIL" \
+        --user_pass="$WP_USER_PSWD" \
+        --role=editor \
+        --allow-root
+else
+    echo "WordPress already installed."
+    echo "WordPress already installed."
+    echo "WordPress already installed."
+fi
+
 chown -R www-data:www-data /var/www/html
 
 mkdir -p /run/php
