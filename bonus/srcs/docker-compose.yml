@@ -1,0 +1,87 @@
+services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    ports: 
+      - '443:443'       # Expose HTTPS on host
+    depends_on:
+      - wordpress       # Depends on WordPress
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/www/html
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    ports:
+      - '9000:9000'     # PHP-FPM exposed for NGINX
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - mariadb
+    tty: true
+    stdin_open: true
+    env_file:
+      - .env
+    restart: always
+
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
+    # ports:
+    #   - '3306:3306'
+    networks:
+      - inception
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    env_file:
+      - .env
+    restart: always
+
+  # adminer:
+  #     container_name: adminer
+  #     build: ./requirements/adminer
+  #     # ports: 
+  #     #   - '8091:8091'       # Expose HTTPS on host
+  #     depends_on:
+  #       - mariadb       # Depends on MariaDb
+  #     networks:
+  #       - inception
+  #     volumes:
+  #       - wordpress_data:/var/www/html
+  #     restart: always
+
+  redis:
+      container_name: redis
+      build: ./requirements/redis
+      depends_on:
+        - wordpress       # Depends on wordpress
+      # ports :
+      #   - '6379:6379'
+      networks:
+        - inception
+      restart: always
+
+
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOME}/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOME}/data/wordpress
+
+networks:
+  inception:
+    driver: bridge
