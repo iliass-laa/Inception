@@ -32,8 +32,6 @@ services:
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
-    # ports:
-    #   - '3306:3306'
     networks:
       - inception
     volumes:
@@ -42,33 +40,69 @@ services:
       - .env
     restart: always
 
-  # adminer:
-  #     container_name: adminer
-  #     build: ./requirements/adminer
-  #     # ports: 
-  #     #   - '8091:8091'       # Expose HTTPS on host
-  #     depends_on:
-  #       - mariadb       # Depends on MariaDb
-  #     networks:
-  #       - inception
-  #     volumes:
-  #       - wordpress_data:/var/www/html
-  #     restart: always
+  adminer:
+      container_name: adminer
+      build: ./requirements/adminer
+      depends_on:
+        - mariadb       # Depends on Mariadb and Nginx
+      networks:
+        - inception
+      volumes:
+        - wordpress_data:/var/www/html
+      restart: always
 
   redis:
       container_name: redis
       build: ./requirements/redis
       depends_on:
         - wordpress       # Depends on wordpress
-      # ports :
-      #   - '6379:6379'
       networks:
         - inception
       restart: always
 
+  mysite:
+    container_name: mysite
+    build: ./requirements/myWebSite
+    networks:
+        - inception
+    ports:
+      - '3000:3000'
+    restart: always
+  
+  
+  portainer :
+    container_name : portainer
+    build : ./requirements/portainer
+    ports :
+      - '9443:9443'
+      - '9001:9000'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - inception
+
+  ftp-server:
+    container_name : ftp-server
+    build : ./requirements/FTPserver
+    depends_on:
+      - wordpress
+    networks:
+      - inception
+    ports: 
+      - '21:21' 
+    volumes :
+      -  wordpress_data:/var/www/wordpress
+    restart : always
 
 
 volumes:
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${HOME}/data/portainer
+      o: bind
   mariadb_data:
     driver: local
     driver_opts:

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-sudo mkdir -p /var/www/html/adminer
-cd /var/www/html/adminer
-sudo wget https://www.adminer.org/latest.php -O index.php
-sudo chown -R www-data:www-data /var/www/html/adminer
-sudo chmod 644 /var/www/html/adminer/index.php
+cd /var/www/html/
+wget https://www.adminer.org/latest.php -O adminer.php
+
+chown -R www-data:www-data /var/www/html/adminer.php
+chmod 644 /var/www/html/adminer.php
 
 
-
+tail -f /dev/null

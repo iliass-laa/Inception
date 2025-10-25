@@ -1,6 +1,7 @@
 VOLUMEPATH = ${HOME}/data
 WORDPRESS_V = $(VOLUMEPATH)/wordpress
 MARIADB_V = $(VOLUMEPATH)/mariadb
+PORTAINER_V = $(VOLUMEPATH)/portainer
 
 
 
@@ -10,7 +11,8 @@ all : build setup
 build :
 	@echo "Building ..."
 	@mkdir -p $(WORDPRESS_V) && \
-	mkdir -p $(MARIADB_V) && \
+	mkdir -p $(MARIADB_V) &&\
+	mkdir -p $(PORTAINER_V) &&\
 	cd ${PWD}/srcs ; docker compose build
 
 

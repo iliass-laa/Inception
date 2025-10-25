@@ -67,5 +67,6 @@ sed -i 's|^listen = .*|listen = 0.0.0.0:9000|' /etc/php/7.4/fpm/pool.d/www.conf
 ############  this is for redis too  ##################
 wget -O /var/www/html/wp-content/object-cache.php https://raw.githubusercontent.com/rhubarbgroup/redis-cache/master/includes/object-cache.php
 chown www-data:www-data /var/www/html/wp-content/object-cache.php 
+######################################################
 
 php-fpm7.4 -F
