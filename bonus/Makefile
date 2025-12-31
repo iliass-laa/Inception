@@ -33,6 +33,7 @@ fclean : clean
 	@echo full cleaning ...
 	@sudo rm -rf $(WORDPRESS_V)
 	@sudo rm -rf $(MARIADB_V)
+	@sudo rm -rf $(PORTAINER_V)
 
 
 
