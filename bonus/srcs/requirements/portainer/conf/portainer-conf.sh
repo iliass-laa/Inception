@@ -1,18 +1,14 @@
-#!/bin/bash
+# !/bin/bash
 
-
-# Download the latest Portainer binary
+# Download the LATEST Portainer binary (2.21.x or newer)
 cd /tmp
-wget https://github.com/portainer/portainer/releases/download/2.19.4/portainer-2.19.4-linux-amd64.tar.gz
+wget https://github.com/portainer/portainer/releases/download/2.21.4/portainer-2.21.4-linux-amd64.tar.gz
 
 # Extract it
-tar xvzf portainer-2.19.4-linux-amd64.tar.gz
+tar xvzf portainer-2.21.4-linux-amd64.tar.gz
 
 # Move to /opt
 mv portainer /opt/
 
-# Create data directory
-mkdir -p /opt/portainer/data
-
-# Run Portainer
-/opt/portainer/portainer --data /opt/portainer/data
+# Run Portainer with correct data path
+exec /opt/portainer/portainer --data /data

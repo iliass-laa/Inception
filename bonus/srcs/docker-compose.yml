@@ -16,7 +16,7 @@ services:
     container_name: wordpress
     build: ./requirements/wordpress
     ports:
-      - '9000:9000'     # PHP-FPM exposed for NGINX
+      - '9000'     
     networks:
       - inception
     volumes:
@@ -44,7 +44,8 @@ services:
       container_name: adminer
       build: ./requirements/adminer
       depends_on:
-        - mariadb       # Depends on Mariadb and Nginx
+        - mariadb
+        - nginx
       networks:
         - inception
       volumes:
@@ -71,6 +72,10 @@ services:
   
   
   portainer :
+    depends_on:
+      - nginx
+      - wordpress
+    restart: always
     container_name : portainer
     build : ./requirements/portainer
     ports :
@@ -81,6 +86,7 @@ services:
       - portainer_data:/data
     networks:
       - inception
+
 
   ftp-server:
     container_name : ftp-server
