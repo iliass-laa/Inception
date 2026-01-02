@@ -133,36 +133,32 @@ Classic references and documentation
 - Docker overview and documentation: https://docs.docker.com/
 - Docker Compose: https://docs.docker.com/compose/
 - Dockerfile best practices: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
-- 42 Network / Inception project guidelines (check your campus intranet or project PDF)
-- Articles and tutorials:
-  - "A Beginner's Guide to Docker" — official Docker tutorials
-  - "12 Factor App" — for app configuration and environment handling
+- And the last thing is the best Book i have read is 'Deep Dive in Docker' very informative.
 
 How AI was used
-- This README was drafted with assistance from an AI (GitHub Copilot / OpenAI ChatGPT). The AI helped:
   - Structure and wording of the README (sections, comparisons, commands).
   - Providing general explanations and comparisons (VM vs Docker, secrets vs env vars, etc.).
 - What AI did NOT do:
   - No production code or service configuration was generated or injected into the repository by the AI in this step (only documentation content was drafted).
-- If you used AI to generate code/configuration in other parts of the repo, document those files and verify them manually for security and correctness before use in production.
 
-## Features (example)
+## Services
+- MariaDB :Relational database used to store all application data.
+- WordPress :The main website application being served.
+- Nginx :Web server responsible for serving WordPress files and handling HTTP/HTTPS requests.
+
+## Bonus Services
+
+- Portainer :Provides a graphical user interface to monitor and manage Docker containers, reducing reliance on CLI commands.
+- Adminer :Lightweight database management UI for interacting with the MariaDB instance without writing SQL manually.
+- FTP Server : Enables file transfers to and from the server for easier content management.
+- MySite : A React-based e-commerce frontend application.
+- Redis : In-memory cache used to reduce database load by storing frequently accessed data.
+
+## Features 
 - Containerized multi-service architecture
 - Persistent data using Docker Volumes
 - Per-service Dockerfiles for reproducible builds
 - Service isolation via Docker networks
-
-## Project structure (example)
-- README.md — this file
-- docker-compose.yml — orchestration (if present)
-- srcs/
-  - service1/
-    - Dockerfile
-    - conf/
-  - service2/
-    - Dockerfile
-    - conf/
-- tools/ or scripts/ — helper scripts
 
 ## Contributing
 - Follow the repository's code style and Docker best practices.
@@ -173,12 +169,3 @@ How AI was used
 - Permission denied when using Docker volumes: check file ownership/UID mapping between host and container.
 - Port already in use: check host processes or use different host port mappings in docker-compose.yml.
 - Container failing to start: inspect logs with docker compose logs <service>.
-
-
----
-
-If you want, I can:
-- tailor the Instructions section to the exact filenames and services in your repo (I can inspect the repository to list Dockerfiles, docker-compose.yml, and actual ports),
-- or produce a Makefile / convenience scripts to build and manage the stack.
-
-Which would you like me to do next?
